@@ -2,16 +2,17 @@
 
 class task_model extends CI_Model {
 
-    public function save($publisherId) {
+    public function save($publisherId, $title, $desc, $estimation, $filePath, $skills) {
         $data = array(
-            'title' => $this->input->post('title'),
-            'description' => $this->input->post('description'),
-            'estimated_time' => $this->input->post('estimation'),
+            'title' => $title,
+            'description' => $desc,
+            'estimated_time' => $estimation,
+            'attachment_path' =>$filePath,
             'publisher_id' => $publisherId
         );
         $this->db->insert('task', $data);
         $task_id = $this->db->insert_id();
-        $skills = $this->input->post('skills');
+        
         foreach ($skills as $item) {
             $skillData = array(
                 'skill_id' => $item,
@@ -46,8 +47,16 @@ class task_model extends CI_Model {
     }
     
      public function getAllInprogressTasks(){
-        $query = $this->db->query('SELECT * FROM task where progress = 1');
+        $userId = $this->session->userdata('user_id');
+        $query = $this->db->query('SELECT * FROM task, user_task WHERE user_task.task_id = task.id AND task.progress = 1'
+                . ' AND user_task.user_id = '.$userId);
         $ret = $query->result_array(); 
         return $ret;
     }
+    
+     public function reject($taskId, $userId){
+           $array = array('task_id' => $taskId, 'user_id' => $userId);
+           $this->db->where($array);
+           $this->db->delete('user_task');
+     }
 }

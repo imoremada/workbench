@@ -65,7 +65,7 @@ function hasPermission($url) {
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dash Board<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo base_url(); ?>task/showAll">Available Tasks</a></li>
-                                    <li><a href="<?php echo base_url(); ?>task/MyTasks">My Tasks</a></li>
+                                    <li><a href="<?php echo base_url(); ?>task/taskByUser">My Tasks</a></li>
                                 </ul>
                             </li>
                         <?php endif; ?>
@@ -100,7 +100,7 @@ function hasPermission($url) {
             <footer>
                 <hr/>
                 <p class="text-center">
-                    <small>&COPY; Copyright 2016</small>
+                    <small>&COPY; Copyright 2017</small>
                 </p>
             </footer>
         </div>

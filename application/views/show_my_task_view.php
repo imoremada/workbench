@@ -1,5 +1,5 @@
 <div id="item-div">
-    <h4>Available Tasks</h4>
+    <h4>My Tasks</h4>
     <table class="table table-hover table-condensed table-bordered">
         <thead>
         <th>Task</th>
@@ -25,10 +25,10 @@
                             <td>
                                 <?php if ($task['progress'] == 0) { ?>
                                     <a class="btn btn-success btn-xs" role="button"
-                                       href="<?php echo base_url(); ?>task/pick/<?php echo urlencode(base64_encode($task['id'])); ?>">Pick Task</a>
+                                       href="<?php echo base_url(); ?>task/pick/<?php echo urlencode(base64_encode($task['task_id'])); ?>">Pick Task</a>
                                    <?php }  else if ($task['progress'] == 1) {?>
                                     <a class="btn btn-warning btn-xs" role="button"
-                                       href="<?php echo base_url(); ?>task/reject/<?php echo urlencode(base64_encode($task['id'])); ?>">Reject Task</a>
+                                       href="<?php echo base_url(); ?>task/reject/<?php echo urlencode(base64_encode($task['task_id']));?>/<?php echo urlencode(base64_encode('2'));?>">Reject Task</a>
                                    <?php } ?>
                             </td>
                         </tr>

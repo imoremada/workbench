@@ -5,8 +5,8 @@
         <th>Task</th>
         <th>Description</th>
         <th>Estimation (in Days)</th>
-        <th>Attachments</th>
         <th>Status</th>
+        <th>Attachments</th>
         <th>Actions</th>
         </thead>
         <tbody>
@@ -20,15 +20,22 @@
                             <td><?php echo $task['title']; ?></td>
                             <td><?php echo $task['description']; ?></td>
                             <td><?php echo $task['estimated_time']; ?></td>
-                            <td></td>
                             <td><?php echo $task['progress']; ?></td>
+                            
+                            <td>
+                                <?php if ($task['attachment_path'] != 'null'){ ?>
+                                <a class="btn btn-warning btn-xs" role="button"
+                                   href="<?php echo base_url(); ?>task/download/<?php echo urlencode(base64_encode($task['attachment_path']));?>">download</a>
+                                <?php }  ?>
+                            </td>
+                            
                             <td>
                                 <?php if ($task['progress'] == 0) { ?>
                                     <a class="btn btn-success btn-xs" role="button"
-                                       href="<?php echo base_url(); ?>task/pick/<?php echo urlencode(base64_encode($task['id'])); ?>">Pick Task</a>
+                                       href="<?php echo base_url(); ?>task/pick/<?php echo urlencode(base64_encode($task['id']));?>">Pick Task</a>
                                    <?php }  else if ($task['progress'] == 1) {?>
                                     <a class="btn btn-warning btn-xs" role="button"
-                                       href="<?php echo base_url(); ?>task/reject/<?php echo urlencode(base64_encode($task['id'])); ?>">Reject Task</a>
+                                       href="<?php echo base_url(); ?>task/reject/<?php echo urlencode(base64_encode($task['id']));?>/<?php echo urlencode(base64_encode('1'));?>">Reject Task</a>
                                    <?php } ?>
                             </td>
                         </tr>

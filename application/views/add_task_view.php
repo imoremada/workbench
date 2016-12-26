@@ -1,4 +1,5 @@
-<form method="post" action="<?php echo base_url(); ?>task/addTask">
+<form method="post" action="<?php echo  base_url(); ?>task/addTask"  enctype="multipart/form-data" >
+    
     <div class="form-group">
         <label>Title</label>
         <input class="form-control" type="text" name="title" />
@@ -25,12 +26,12 @@
        
     </div>
     <div>
-        <label>Attachments</label>
-        <input type="file" name="fileToUpload" id="fileToUpload">
+       
+        <input type="file"  name="userfile" size="20" id="userfile">
         <br/>
     </div>
     <div class="form-group">
-        <input type="submit" value="Submit Task" class="btn btn-primary"/>
+        <input type="submit" value="upload" class="btn btn-primary"/>
     </div>
 </form>
 <?php
