@@ -20,11 +20,22 @@ class Task extends CI_Controller {
     }
 
     public function index() {
-        $this->load->model('skill_model');
-        $data['main_content'] = "add_task_view";
-        $this->load->view("layouts/main", $data);
     }
 
+    public function manageTasks($view) {
+        $id = base64_decode(urldecode($view));
+        $this->load->model('skill_model');
+        $this->load->model('task_model');
+        $data['main_content'] = "add_task_view";
+        if($id === '2'){
+        $data['main_content'] = "show_all_pending_task_view";
+    }
+     else if($id === '3'){
+        $data['main_content'] = "show_all_completed_task_view";
+    }
+        $this->load->view("layouts/main", $data);
+    }
+    
     public function addTask() {
         $this->load->model('task_model');
         $publisherId = $this->session->userdata('user_id');
@@ -63,11 +74,14 @@ class Task extends CI_Controller {
     public function pick($taskId) {
         $id = base64_decode(urldecode($taskId));
         $this->load->model('task_model');
-        $this->task_model->updateProgressTo($id, "1");
-
         $userId = $this->session->userdata('user_id');
-        $this->task_model->insertIntoUserTask($userId, $id);
+        $resultArray = $this->task_model->getUserPickedTaskByTaskId($id, $userId);
+        if (empty($resultArray)) 
+        {
+            $this->task_model->updateUserTaskProgressTo($id, $userId, "1");
 
+            $this->task_model->insertIntoUserTask($userId, $id);
+        }
         $data['main_content'] = "show_all_task_view";
         $this->load->view("layouts/main", $data);
     }
@@ -78,14 +92,14 @@ class Task extends CI_Controller {
         $this->load->view("layouts/main", $data);
     }
 
-    public function reject($taskId, $view) {
+    public function rejectUserTask($taskId, $view) {
         $this->load->model('task_model');
 
         $id = base64_decode(urldecode($taskId));
-        $this->task_model->updateProgressTo($id, "0");
         $userId = $this->session->userdata('user_id');
+        $this->task_model->updateUserTaskProgressTo($id, $userId, "0");
 
-        $this->task_model->reject($id, $userId);
+        $this->task_model->rejectUserTask($id, $userId);
         $viewTobeDisplayed = '';
         if (base64_decode(urldecode($view)) === '1') {
             $viewTobeDisplayed = 'show_all_task_view';
@@ -96,8 +110,45 @@ class Task extends CI_Controller {
         $this->load->view("layouts/main", $data);
     }
 
+     public function finishUserTask($taskId) {
+        $this->load->model('task_model');
+
+        $id = base64_decode(urldecode($taskId));
+        $userId = $this->session->userdata('user_id');
+        $this->task_model->updateUserTaskProgressTo($id,$userId, "2");
+        
+        $this->task_model->completeUserTask($id, $userId);
+        
+        $data['main_content'] = 'show_my_task_view';
+        $this->load->view("layouts/main", $data);
+    }
+    
     public function download($filePath)
     {
         force_download($id = base64_decode(urldecode($filePath)), NULL);
+    }
+    
+    public function remove($taskId)
+    {
+        $this->load->model('task_model');
+        $id = base64_decode(urldecode($taskId));
+        $userId = $this->session->userdata('user_id');
+        $this->task_model->delete($id);
+        $data['main_content'] = 'show_all_completed_task_view';
+        $this->load->view("layouts/main", $data);
+    }
+    
+    public function closeTask($taskId, $uId) {
+        $this->load->model('task_model');
+
+        $id = base64_decode(urldecode($taskId));
+        $userId = base64_decode(urldecode($uId));
+        
+        $this->task_model->updateTaskProgressTo($id,$userId, "2");
+        
+        $this->task_model->updateTaskCompletedUser($id, $userId);  
+        
+        $data['main_content'] = 'show_all_completed_task_view';
+        $this->load->view("layouts/main", $data);
     }
 }

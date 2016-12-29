@@ -23,6 +23,7 @@ function hasPermission($url) {
         <link href="<?php echo base_url(); ?>assets/css/jquery-ui.css" rel="stylesheet" />
         <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
         <link href="<?php echo base_url(); ?>assets/css/custom.css" rel="stylesheet" />
+        <link href="<?php echo base_url(); ?>assets/css/font-awesome.min.css" rel="stylesheet" />
     </head>
     <body>
         <div id="main-div">
@@ -34,9 +35,9 @@ function hasPermission($url) {
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Manage Tasks<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?php echo base_url(); ?>task">Add Task</a></li>
-                                    <li><a href="<?php echo base_url(); ?>">Pending Tasks</a></li>
-                                    <li><a href="<?php echo base_url(); ?>">Finished Task</a></li>
+                                    <li><a href="<?php echo base_url(); ?>task/manageTasks/<?php echo urlencode(base64_encode('1')); ?>">Add Task</a></li>
+                                    <li><a href="<?php echo base_url(); ?>task/manageTasks/<?php echo urlencode(base64_encode('2')); ?>">Pending Tasks</a></li>
+                                    <li><a href="<?php echo base_url(); ?>task/manageTasks/<?php echo urlencode(base64_encode('3')); ?>">Completed Task</a></li>
                                 </ul>
                             </li>
                         <?php endif; ?>
@@ -65,7 +66,7 @@ function hasPermission($url) {
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dash Board<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo base_url(); ?>task/showAll">Available Tasks</a></li>
-                                    <li><a href="<?php echo base_url(); ?>task/taskByUser">My Tasks</a></li>
+                                    <li><a href="<?php echo base_url(); ?>task/taskByUser">My Assigned Tasks</a></li>
                                 </ul>
                             </li>
                         <?php endif; ?>
