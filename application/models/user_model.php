@@ -55,7 +55,7 @@ class user_model extends CI_Model {
     }
 
     public function get_user_by_id($user_id) {
-        $this->db->where('user_id', $user_id);
+        $this->db->where('id', $user_id);
         $result = $this->db->get('user');
 
         if ($result->num_rows() == 1) {

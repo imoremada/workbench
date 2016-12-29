@@ -33,7 +33,10 @@ class task_model extends CI_Model {
             'progress' => $progress
         );
 
-        $this->db->where('id', $taskId);
+        $condition = array(
+            'id' => $taskId
+        );
+        $this->db->where($condition);
         $this->db->update('task', $taskData);
     }
 
@@ -56,7 +59,7 @@ class task_model extends CI_Model {
 
     public function getAllTaskByProgress($progress) {
 
-        $query = $this->db->query('SELECT * FROM task, user_task WHERE user_task.task_id = task.id AND task.progress = '.$progress);
+        $query = $this->db->query('SELECT * FROM task, user_task WHERE user_task.task_id = task.id AND task.progress = ' . $progress);
         $ret = $query->result_array();
         return $ret;
     }
@@ -66,67 +69,90 @@ class task_model extends CI_Model {
         $this->db->where($array);
         $this->db->delete('user_task');
     }
-    
-     public function delete($taskId) {
+
+    public function delete($taskId) {
         $array = array('id' => $taskId);
         $this->db->where($array);
         $this->db->delete('task');
-        
+
         $array1 = array('task_id' => $taskId);
         $this->db->where($array1);
         $this->db->delete('user_task');
-        
+
         $array2 = array('task_id' => $taskId);
         $this->db->where($array2);
         $this->db->delete('task_skill');
     }
-    
-    public function completeUserTask($taskId, $userId){
-             
-         $condition = array(
-        'task_id' => $taskId ,
-        'user_id' => $userId
+
+    public function completeUserTask($taskId, $userId) {
+
+        $condition = array(
+            'task_id' => $taskId,
+            'user_id' => $userId
         );
-         
+
         $curDate = date("Y-m-d");
         $array = array('end_date' => $curDate);
         $this->db->where($condition);
-        $this->db->update('user_task',$array);
+        $this->db->update('user_task', $array);
     }
-    
+
     public function updateUserTaskProgressTo($taskId, $userId, $progress) {
         $taskData = array(
             'status' => $progress
         );
         $condition = array(
-        'task_id' => $taskId ,
-        'user_id' => $userId
+            'task_id' => $taskId,
+            'user_id' => $userId
         );
         $this->db->where($condition);
         $this->db->update('user_task', $taskData);
     }
-    
+
     public function getUserPickedTaskByTaskId($taskId, $userId) {
 
-        $query = $this->db->query('SELECT * FROM user_task WHERE task_id ='.$taskId.' AND user_id = '.$userId);
+        $query = $this->db->query('SELECT * FROM user_task WHERE task_id =' . $taskId . ' AND user_id = ' . $userId);
         $ret = $query->result_array();
         return $ret;
     }
-    
-      public function getAllUserPickedTasksByProgress($progress) {
-          
-        $query = $this->db->query('SELECT * FROM task, user_task WHERE user_task.task_id = task.id AND user_task.status = '.$progress);
+
+    public function getAllUserPickedTasksByProgress($progress) {
+
+        $query = $this->db->query('SELECT * FROM task, user_task WHERE user_task.task_id = task.id AND user_task.status = ' . $progress);
         $ret = $query->result_array();
         return $ret;
     }
-    
+
     public function updateTaskCompletedUser($taskId, $userId) {
         $taskData = array(
             'completed_user_id' => $userId
         );
 
-        $this->db->where('id', $taskId);
+        $condition = array(
+            'id' => $taskId
+        );
+        $this->db->where($condition);
         $this->db->update('task', $taskData);
+    }
+
+    public function getTaskById($taskId) {
+
+        $query = $this->db->query('SELECT * FROM task WHERE id = ' . $taskId);
+        $ret = $query->result_array();
+        return $ret;
+    }
+
+    public function updateUserTaskRatingTo($userId, $taskId, $rating) {
+        $taskData = array(
+            'rating' => $rating
+        );
+
+        $condition = array(
+            'task_id' => $taskId,
+            'user_id' => $userId
+        );
+        $this->db->where($condition);
+        $this->db->update('user_task', $taskData);
     }
 
 }

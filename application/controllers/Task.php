@@ -140,15 +140,35 @@ class Task extends CI_Controller {
     
     public function closeTask($taskId, $uId) {
         $this->load->model('task_model');
+        $this->load->model('user_model');
 
-        $id = base64_decode(urldecode($taskId));
-        $userId = base64_decode(urldecode($uId));
+        //$id = base64_decode(urldecode($taskId));
+        //$userId = base64_decode(urldecode($uId));
+        //$this->task_model->updateTaskProgressTo($id, "2");
         
-        $this->task_model->updateTaskProgressTo($id,$userId, "2");
+        //$this->task_model->updateTaskCompletedUser($id, $userId);  
+        
+        $data['taskId'] = $taskId;
+        $data['userId'] = $uId;
+        $data['main_content'] = 'finalize_task_view';
+        
+        $this->load->view("layouts/main", $data);
+    }
+    
+    public function finalize()
+    {
+        $this->load->model('task_model');
+        $id = $this->input->post('task_id');
+        $userId = $this->input->post('user_id');
+        $rating = $this->input->post('rating');
+        
+        $this->task_model->updateTaskProgressTo($id, "2");
         
         $this->task_model->updateTaskCompletedUser($id, $userId);  
+        $this->task_model->updateUserTaskRatingTo($userId, $id, $rating);
         
         $data['main_content'] = 'show_all_completed_task_view';
+        
         $this->load->view("layouts/main", $data);
     }
 }
