@@ -14,7 +14,10 @@
             $all_tasks = $this->task_model->getAllTasks();
             if ($all_tasks):
                 foreach ($all_tasks as $task):
-                    if ($task['progress'] != 3) {
+                    $tId = $task['id'];
+                    $this->task_model->isTaskAlreadySelected($tId);
+                    if ($task['progress'] == 0 && $this->task_model->isTaskAlreadySelected($tId) === 'false') {
+                        
                         ?>
                         <tr>
                             <td><?php echo $task['title']; ?></td>

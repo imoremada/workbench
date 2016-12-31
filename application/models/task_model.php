@@ -64,6 +64,15 @@ class task_model extends CI_Model {
         return $ret;
     }
 
+    public function isTaskAlreadySelected($taskId){
+        $query = $this->db->query('SELECT * FROM user_task WHERE task_id = '.$taskId);
+        
+        $ret = $query->result_array();
+         if ($ret){
+             return 'true';
+         }
+        return 'false'; 
+    }
     public function reject($taskId, $userId) {
         $array = array('task_id' => $taskId, 'user_id' => $userId);
         $this->db->where($array);
@@ -147,6 +156,18 @@ class task_model extends CI_Model {
             'rating' => $rating
         );
 
+        $condition = array(
+            'task_id' => $taskId,
+            'user_id' => $userId
+        );
+        $this->db->where($condition);
+        $this->db->update('user_task', $taskData);
+    }
+    
+    public function updateUserTaskFilePath($taskId, $userId, $path) {
+        $taskData = array(
+            'file_path' => $path
+        );
         $condition = array(
             'task_id' => $taskId,
             'user_id' => $userId

@@ -40,7 +40,7 @@
                                     <a class="btn btn-warning btn-xs" role="button"
                                        href="<?php echo base_url(); ?>task/rejectUserTask/<?php echo urlencode(base64_encode($task['task_id']));?>/<?php echo urlencode(base64_encode('2'));?>">Reject Task</a>
                                 <a class="btn btn-success btn-xs" role="button"
-                                       href="<?php echo base_url(); ?>task/finishUserTask/<?php echo urlencode(base64_encode($task['task_id']));?>">Finish Task</a>
+                                       href="<?php echo base_url(); ?>task/finishUserTask/<?php echo urlencode(base64_encode($task['task_id']));?>">Proceed to Finish</a>
                                    <?php } ?>
                             </td>
                         </tr>

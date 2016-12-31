@@ -40,7 +40,7 @@ class Task extends CI_Controller {
         $this->load->model('task_model');
         $publisherId = $this->session->userdata('user_id');
         
-        $config['upload_path'] = './uploads/';
+        $config['upload_path'] = './uploads/admin_files';
         $config['allowed_types'] = 'zip|rar|gif|jpg|png';
         $config['max_size'] = '8192';
         $config['max_width'] = '1024';
@@ -48,8 +48,6 @@ class Task extends CI_Controller {
         $fullPath = 'null';
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('userfile')) {
-//            echo $fileName;
-//            echo $this->upload->display_errors();
             $this->load->view('error_view');
         }
         else
@@ -113,13 +111,14 @@ class Task extends CI_Controller {
      public function finishUserTask($taskId) {
         $this->load->model('task_model');
 
-        $id = base64_decode(urldecode($taskId));
-        $userId = $this->session->userdata('user_id');
-        $this->task_model->updateUserTaskProgressTo($id,$userId, "2");
+        //$id = base64_decode(urldecode($taskId));
+        //$userId = $this->session->userdata('user_id');
         
-        $this->task_model->completeUserTask($id, $userId);
+        //$this->task_model->updateUserTaskProgressTo($id,$userId, "2");
         
-        $data['main_content'] = 'show_my_task_view';
+        //$this->task_model->completeUserTask($id, $userId);
+        $data['taskId'] = $taskId;
+        $data['main_content'] = 'task_completion_view';
         $this->load->view("layouts/main", $data);
     }
     
@@ -169,6 +168,38 @@ class Task extends CI_Controller {
         
         $data['main_content'] = 'show_all_completed_task_view';
         
+        $this->load->view("layouts/main", $data);
+    }
+    
+    public function markAsFinished()
+    {
+        $this->load->model('task_model');
+        $taskId = base64_decode(urldecode($this->input->post('task_id')));
+        
+        $userId = $this->session->userdata('user_id');
+        $this->task_model->updateUserTaskProgressTo($taskId, $userId, "2");
+        
+        $this->task_model->completeUserTask($taskId, $userId);
+        
+        $config['upload_path'] = './uploads/user_files';
+        $config['allowed_types'] = 'zip|rar|gif|jpg|png';
+        $config['max_size'] = '8192';
+        $config['max_width'] = '1024';
+        $config['max_height'] = '768';
+        $fullPath = 'null';
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('userfile')) {
+            $this->load->view('error_view');
+        }
+        else
+        {
+            $retData = array('upload_data' => $this->upload->data());
+            $fullPath = $retData['upload_data']['full_path'];
+        }
+        
+        $this->task_model->updateUserTaskFilePath($taskId, $userId, $fullPath);
+        
+        $data['main_content'] = 'show_my_task_view';
         $this->load->view("layouts/main", $data);
     }
 }
