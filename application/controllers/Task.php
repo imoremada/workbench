@@ -26,6 +26,7 @@ class Task extends CI_Controller {
         $id = base64_decode(urldecode($view));
         $this->load->model('skill_model');
         $this->load->model('task_model');
+        $this->load->model('user_model');
         $data['main_content'] = "add_task_view";
         if($id === '2'){
         $data['main_content'] = "show_all_pending_task_view";
@@ -70,7 +71,7 @@ class Task extends CI_Controller {
     }
 
     public function pick($taskId) {
-        $id = base64_decode(urldecode($taskId));
+       
         $this->load->model('task_model');
         $userId = $this->session->userdata('user_id');
         $resultArray = $this->task_model->getUserPickedTaskByTaskId($id, $userId);
@@ -157,6 +158,7 @@ class Task extends CI_Controller {
     public function finalize()
     {
         $this->load->model('task_model');
+        
         $id = $this->input->post('task_id');
         $userId = $this->input->post('user_id');
         $rating = $this->input->post('rating');

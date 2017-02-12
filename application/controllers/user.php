@@ -49,9 +49,18 @@ class User extends CI_Controller {
         }
     }
 
-    public function view_profile() {
+    public function view_profile($userId) {
         $this->load->model('user_model');
-
+        $this->load->model('task_model');
+        $this->load->model('skill_model');
+        
+        $uId = base64_decode(urldecode($userId));
+        $result = $this->task_model->getAverageUserRating($uId);
+        foreach($result as &$value)
+        {
+             $data['rating']  = ceil($value['AvgRating']);
+        }
+        $data['userId'] = $userId;
         $data['main_content'] = "user_profile";
         $this->load->view("layouts/main", $data);
     }

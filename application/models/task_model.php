@@ -176,4 +176,9 @@ class task_model extends CI_Model {
         $this->db->update('user_task', $taskData);
     }
 
+    public function getAverageUserRating($userId){
+        $query = $this->db->query('SELECT AVG(user_task.rating) as AvgRating FROM task, user_task WHERE user_task.task_id = task.id AND task.progress = 2 AND user_task.user_id = ' . $userId);
+        $ret = $query->result_array();
+        return $ret;
+    }
 }
